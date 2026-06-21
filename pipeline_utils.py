@@ -62,7 +62,7 @@ def transcribe_video(video_path, reel_id):
 
     result = model.transcribe(  
     str(video_path),
-    language="en"
+    task="translate"
 )
 
     transcript = result["text"]
