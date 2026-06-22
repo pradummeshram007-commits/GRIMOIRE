@@ -16,16 +16,29 @@ for reel_folder in metadata_folder.iterdir():
 
                 summary_text = f.read()
 
+            topic = "Unknown"
+
+            for line in summary_text.splitlines():
+
+                if "topic" in line.lower():
+
+                    topic = line.replace("**", "").replace("Topic:", "").strip()
+                    break
+
             all_reels.append({
                 "reel_id": reel_folder.name,
-                "summary": summary_text
+                "summary": summary_text,
+                "topic": topic
             })
 
 print(f"Loaded {len(all_reels)} reels\n")
 
+
+
+#"""Store scores instead of printing immediately"""
 query = input("Search: ").lower()
 
-print("\nRESULTS\n")
+results = []
 
 for reel in all_reels:
 
@@ -37,4 +50,30 @@ for reel in all_reels:
 
         score += summary.count(word)
 
-    print(f"{reel['reel_id']} -> Score: {score}")
+    results.append({
+        "reel_id": reel["reel_id"],
+        "score": score,
+        "summary": reel["summary"],
+        "topic": reel["topic"]
+    })
+
+
+#Sort by score
+results.sort(
+    key=lambda x: x["score"],
+    reverse=True
+)
+
+#Show only useful results
+print("\nRESULTS\n")
+
+for result in results:
+
+    if result["score"] == 0:
+        continue
+
+    print(f"Topic: {result['topic']}")
+    print(f"Reel ID: {result['reel_id']}")
+    print(f"Score: {result['score']}")
+    print("-" * 40)
+    print(result["summary"][:300])
