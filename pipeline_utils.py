@@ -58,11 +58,12 @@ def create_folders(reel_id):
 def transcribe_video(video_path, reel_id):
 
     print(f"Transcribing {reel_id}...")
-    model = whisper.load_model("base")
+    model = whisper.load_model("small")
 
     result = model.transcribe(  
     str(video_path),
     task="translate"
+    
 )
 
     transcript = result["text"]
