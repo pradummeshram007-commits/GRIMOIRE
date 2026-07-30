@@ -1,4 +1,6 @@
 from pathlib import Path
+import webbrowser
+import json
 
 metadata_folder = Path("metadata")
 
@@ -30,6 +32,7 @@ for reel_folder in metadata_folder.iterdir():
     if reel_folder.is_dir():
 
         summary_file = reel_folder / "summary.txt"
+        info_file = reel_folder / "info.json"
 
         if summary_file.exists():
 
@@ -65,8 +68,13 @@ for reel_folder in metadata_folder.iterdir():
             "Search Keywords"
             )
 
+            url = ""
 
+            if info_file.exists():
+                with open(info_file, "r", encoding="utf-8") as f:
+                    info = json.load(f)
 
+                url = info.get("url", "")
 
 
             keywords = ""
@@ -77,9 +85,11 @@ for reel_folder in metadata_folder.iterdir():
                         summary_text.find(line):
                     ]
                     break
+                
 
             all_reels.append({ 
                 "reel_id": reel_folder.name,
+                "url": url,
                 "summary": summary_text,
                 "topic": topic,
                 "summary_section": summary_section,
@@ -118,6 +128,7 @@ for reel in all_reels:
     results.append({
     
     "reel_id": reel["reel_id"],
+    "url": reel["url"],
     "summary": reel["summary"],
     "topic": reel["topic"],
     "summary_section": reel["summary_section"],
@@ -135,7 +146,7 @@ results.sort(
 )
 
 #Show only useful results
-print("\nRESULTS\n")
+'''print("\nRESULTS\n")
 
 rank = 1
 for result in results:
@@ -159,4 +170,100 @@ for result in results:
 
     print("\n" + "=" * 50)
     
+    rank += 1'''
+
+
+
+'''print("\nRESULTS\n")
+
+displayed_results = []
+
+rank = 1
+
+for result in results:
+
+    if result["score"] == 0:
+        continue
+
+    displayed_results.append(result)
+
+    print("=" * 50)
+    print(f"{rank}.")
+    print()
+
+    print(f"Topic: {result['topic']}")
+    print(f"Reel ID: {result['reel_id']}")
+    print(f"Score: {result['score']}")
+
+    print("\nSummary:")
+    print(result["summary_section"])
+
+    print("\nWhy Save:")
+    print(result["why_save"])
+
+    print("\n" + "=" * 50)
+
+    rank += 1'''
+
+
+print("\nRESULTS\n")
+
+displayed_results = []
+
+rank = 1
+
+for result in results:
+
+    if result["score"] == 0:
+        continue
+
+    displayed_results.append(result)
+
+    print("=" * 50)
+    print(f"{rank}. {result['topic']}")
+    print()
+
+    print(f"Topic: {result['topic']}")
+    print(f"Reel ID: {result['reel_id']}")
+    print(f"Score: {result['score']}")
+
+    print("\nSummary:")
+    print(result["summary_section"])
+
+    print("\nWhy Save:")
+    print(result["why_save"])
+
+    print("\n" + "=" * 50)
+
     rank += 1
+    
+
+
+if displayed_results:
+
+    choice = input(
+        f"\nOpen a reel? (1-{len(displayed_results)} / n): "
+    ).strip().lower()
+
+    if choice != "n":
+
+        if choice.isdigit():
+
+            choice = int(choice)
+
+            if 1 <= choice <= len(displayed_results):
+
+                selected = displayed_results[choice - 1]
+
+                print("Opening reel...")
+
+                webbrowser.open(selected["url"])
+
+            else:
+                print("Invalid choice.")
+
+        else:
+            print("Invalid choice.")
+
+
+webbrowser.open(selected["url"])

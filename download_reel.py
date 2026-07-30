@@ -13,6 +13,9 @@ def download_reel(url):
 
     result = subprocess.run(command)
 
-    print("Download complete")
+    if result.returncode == 0:
+        print("Download complete")
+        return True
 
-
+    print("Download failed")
+    return False

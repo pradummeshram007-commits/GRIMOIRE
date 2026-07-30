@@ -1,0 +1,53 @@
+**Topic:**
+DSA Preparation Plan
+
+**Summary:**
+The speaker provides a 2-month plan for preparing for Data Science and Anal
+Analytics (DSA) interviews, focusing on three difficulty levels: Easy, Medi
+Medium, and Hard. The plan is presented in a roadmap format with clear cate
+categories of problems like Arrays, Strings, Dynamic Programming, Graphs, e
+etc.
+
+**Key Takeaways:**
+- A two-month DSA preparation plan has been created.
+- The plan covers 8 weeks of study, breaking down into three levels (Easy, 
+Medium, Hard).
+- The plan includes a variety of problem-solving categories such as Arrays,
+Arrays, Strings, Graphs, Dynamic Programming, and more.
+- Participants will be able to solve problems from basic concepts like Ares
+Ares, Strings to advanced ones like graph questions after about 4 weeks.
+- Contest preparation begins from the fourth or fifth week.
+
+**Important Names:**
+1. DSA
+2. Google
+3. Microsoft
+4. Arrays
+5. Strings
+6. Dynamic Programming
+7. Graphs
+
+**Why Save:**
+This content is highly useful for future reference, learning, and problem-s
+problem-solving in Data Science and Analytics preparation. It can serve as 
+a structured roadmap to help individuals prepare efficiently over the next 
+two months.
+
+**Assigned Collection:**
+Technology
+
+**Search Keywords:**
+DSA Preparation Plan
+2-Month DSA Study Guide
+DSA Interview Preparation Roadmap
+Data Science and Analytics Practice Questions
+Arrays, Strings, Graphs, Dynamic Programming Problems
+Easy, Medium, Hard DSA Levels
+Ares, Strings, Graph DSA Topics
+Google Data Science Interview Prep
+Microsoft Data Science Round Prep
+DSA Interview Question Categorization
+DSA Contest Preparation
+DSA Study Plan for Beginners
+DSA Study Plan for Professionals
+
