@@ -8,7 +8,10 @@ import gc
 
 
 def extract_frames(video_path, reel_id):
-
+    """
+    Extracts frames from the downloaded video using FFmpeg.
+    Samples the video at 0.5 FPS (1 frame every 2 seconds) to avoid redundant images while capturing key visual changes.
+    """
     frames_folder = Path(f"frames/{reel_id}")
 
     frames_folder.mkdir(parents=True, exist_ok=True)
@@ -29,6 +32,10 @@ def extract_frames(video_path, reel_id):
     return frames_folder
 
 def get_all_videos():
+    """
+    Scans the downloads directory and returns a list of all .mp4 files.
+    Used for batch processing multiple videos.
+    """
     downloads = Path("downloads")
 
     videos = []
@@ -41,10 +48,12 @@ def get_all_videos():
 
 
 def get_reel_id(video_path):
+    """Extracts the unique ID of the reel from its filename (assumes filename is the ID)."""
     return video_path.stem
 
 
 def create_folders(reel_id):
+    """Creates the necessary output directories for a specific reel's frames and metadata."""
     frames_folder = Path(f"frames/{reel_id}")
     metadata_folder = Path(f"metadata/{reel_id}")
 
@@ -56,8 +65,12 @@ def create_folders(reel_id):
 
 
 def transcribe_video(video_path, reel_id):
-
+    """
+    Transcribes the video's audio track using OpenAI's Whisper model.
+    Utilizes the 'translate' task to automatically convert foreign languages to English.
+    """
     print(f"Transcribing {reel_id}...")
+    # Load the Whisper 'small' model which offers a good balance of accuracy and speed
     model = whisper.load_model("small")
 
     result = model.transcribe(  
@@ -85,7 +98,11 @@ def transcribe_video(video_path, reel_id):
 
 
 def run_ocr(reel_id):
-
+    """
+    Performs Optical Character Recognition (OCR) on all extracted video frames.
+    Extracts visual text and consolidates unique phrases to avoid duplication across consecutive identical frames.
+    """
+    # Initialize EasyOCR reader for English
     reader = easyocr.Reader(['en'])
     frames_folder = f"frames/{reel_id}"
     metadata_folder = f"metadata/{reel_id}"
@@ -124,7 +141,11 @@ def run_ocr(reel_id):
 
 
 def clean_ocr(reel_id):
-
+    """
+    Sanitizes raw OCR output by applying quality rules.
+    Removes extremely short strings, lines without letters, and case-insensitive duplicates.
+    This significantly improves the quality of data passed to the LLM.
+    """
     input_file = f"metadata/{reel_id}/ocr.txt"
     output_file = f"metadata/{reel_id}/cleaned_ocr.txt"
 
@@ -170,7 +191,10 @@ def clean_ocr(reel_id):
 
 
 def generate_summary(reel_id):
-
+    """
+    Generates structured metadata using a local LLM (Qwen 2.5:3b via Ollama).
+    Fuses the audio transcript and the cleaned visual OCR data into a single, searchable summary document.
+    """
     import subprocess
     import re
     from pathlib import Path
@@ -374,7 +398,10 @@ OCR:
 
 
 def process_video(video_path):
-
+    """
+    Orchestrates the entire data extraction pipeline for a single video.
+    Executes frame extraction, transcription, OCR, text cleaning, and LLM summarization sequentially.
+    """
     reel_id = get_reel_id(video_path)
 
     create_folders(reel_id)

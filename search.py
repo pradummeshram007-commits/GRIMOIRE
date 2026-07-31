@@ -5,7 +5,10 @@ import json
 metadata_folder = Path("metadata")
 
 def extract_section(text, section_name):
-
+    """
+    Parses the generated summary text and extracts a specific section (e.g., 'Topic:', 'Summary:').
+    Reads lines until it encounters the next section header (denoted by '**').
+    """
     lines = text.splitlines()
 
     capture = False
@@ -27,6 +30,7 @@ def extract_section(text, section_name):
 
 all_reels = []
 
+# Load all metadata from the file system into memory to prepare for fast searching
 for reel_folder in metadata_folder.iterdir():
 
     if reel_folder.is_dir():
@@ -107,6 +111,7 @@ query = input("Search: ").lower()
 
 results = []
 
+# Rank all reels based on the search query
 for reel in all_reels:
 
     summary = reel["summary"].lower()
@@ -114,11 +119,13 @@ for reel in all_reels:
     score = 0
 
     for word in query.split():
-
+        # Base weight: 1x for occurrences anywhere in the summary text
         score += summary.count(word)
 
+        # High weight: 10x for occurrences in the Topic (indicates highly relevant match)
         score += reel["topic"].lower().count(word) * 10
 
+        # Medium weight: 5x for occurrences in the AI-generated Keywords
         score += reel["keywords"].lower().count(word) * 5
     
     
@@ -139,7 +146,7 @@ for reel in all_reels:
     })
 
 
-#Sort by score
+# Sort the results array in descending order based on the accumulated relevance score
 results.sort(
     key=lambda x: x["score"],
     reverse=True
@@ -241,6 +248,7 @@ for result in results:
 
 if displayed_results:
 
+    # Provide an interactive prompt to open a selected result directly in the web browser
     choice = input(
         f"\nOpen a reel? (1-{len(displayed_results)} / n): "
     ).strip().lower()
